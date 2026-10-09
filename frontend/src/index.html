@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Multi-Tier Demo</title>
+  <style>
+    body { font-family: sans-serif; max-width: 520px; margin: 50px auto; }
+    li { margin: 6px 0; }
+    small { color: #666; }
+  </style>
+</head>
+<body>
+  <h1>Multi-tier app</h1>
+  <p><small>Frontend build: __BUILD_TIME__</small></p>
+  <form id="f">
+    <input id="t" placeholder="Write a message" required>
+    <button>Save</button>
+  </form>
+  <ul id="list"></ul>
+  <script>
+    async function load() {
+      const res = await fetch('/api/messages');
+      const rows = await res.json();
+      document.getElementById('list').innerHTML =
+        rows.map(r => '<li>' + r.text.replace(/</g, '&lt;') + '</li>').join('');
+    }
+    document.getElementById('f').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const t = document.getElementById('t');
+      await fetch('/api/messages', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ text: t.value })
+      });
+      t.value = '';
+      load();
+    });
+    load();
+  </script>
+</body>
+</html>
