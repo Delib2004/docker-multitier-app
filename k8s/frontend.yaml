@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: frontend
-          image: YOUR_DOCKERHUB_USER/multitier-frontend:1.0
+          image: delibms/multitier-frontend:1.0
           ports:
             - containerPort: 80
 ---
